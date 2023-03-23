@@ -1,0 +1,11 @@
+[package]
+name = "rustcraft"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+futures-executor = "0.3.27"
+wgpu = "0.15.1"
+winit = "0.28.3"
+
+
