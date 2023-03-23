@@ -2,8 +2,6 @@ use crate::window::Window;
 
 mod window;
 mod keyboard;
-mod renderer;
-mod batch_renderer;
 
 fn main() {
     println!("Starting Rustcraft!");
