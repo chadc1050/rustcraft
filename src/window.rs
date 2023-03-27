@@ -1,6 +1,6 @@
 use std::fs::{File};
 use std::io::Read;
-use std::time::{Duration, SystemTime};
+use std::time::{SystemTime};
 use crate::keyboard::KeyboardEvent;
 
 use winit::{
@@ -63,7 +63,7 @@ impl Window {
             .await
             .expect("Failed to create device");
 
-        let mut shader_file = File::open("assets\\shaders\\default.wgsl").expect("Shader file not found!");
+        let mut shader_file = File::open("assets/shaders/default.wgsl").expect("Shader file not found!");
         let mut shader_content = String::new();
         shader_file.read_to_string(&mut shader_content).expect("Failed to read in glsl file!");
 
