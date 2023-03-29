@@ -12,6 +12,7 @@ fn main() {
 
     let pool_load_time = SystemTime::now();
     let pool = AssetPool::initialize_pool();
+
     println!("Asset pool took {} secs to load!", pool_load_time.elapsed().unwrap().as_secs_f32());
 
     futures_executor::block_on(Window::new(1920, 1080, String::from("Rustcraft")).run());
