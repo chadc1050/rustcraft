@@ -1,5 +1,9 @@
-target
+# Application
+/target
+/opt
+gl_bindings.rs
+/assets/textures/current/
 
+# Intellij
 .idea
 
-/assets/textures/current/
