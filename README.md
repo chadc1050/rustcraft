@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img src="assets/internal/Rustcraft.png" />
+    <img src="Rustcraft.png" />
 </h1> 
 
 [Minecraft](https://www.minecraft.net/) is a popular Java-based game that has millions of active users around the world. 
