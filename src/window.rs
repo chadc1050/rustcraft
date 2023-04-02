@@ -1,5 +1,3 @@
-use std::fs::{File};
-use std::io::Read;
 use std::num::NonZeroU32;
 use std::time::{SystemTime};
 
@@ -19,13 +17,13 @@ use crate::keyboard::KeyboardEvent;
 
 use winit::event::Event;
 use winit::event::WindowEvent;
-use winit::event_loop::ControlFlow;
 use winit::event_loop::EventLoop;
 use winit::window::WindowBuilder;
 
 use winit::dpi::PhysicalSize;
 use winit::dpi::Size;
 use winit::event::DeviceEvent;
+use crate::game_state::GameState;
 use crate::renderer::Renderer;
 
 pub struct Window {
@@ -109,15 +107,15 @@ impl Window {
 
         let mut not_current_gl_context = Some(unsafe {
             gl_display.create_context(&gl_config, &context_attributes).unwrap_or_else(|_| {
-                gl_display.create_context(&gl_config, &fallback_context_attributes).unwrap_or_else(
-                    |_| {
-                        gl_display
-                            .create_context(&gl_config, &legacy_context_attributes)
-                            .expect("failed to create context")
+                gl_display.create_context(&gl_config, &fallback_context_attributes).unwrap_or_else(|_| {
+                        gl_display.create_context(&gl_config, &legacy_context_attributes).expect("failed to create context")
                     },
                 )
             })
         });
+
+        let game_state = GameState::initialize(&gl_display);
+        game_state.start();
 
         let mut state = None;
         let mut renderer = None;
@@ -126,6 +124,7 @@ impl Window {
             control_flow.set_wait();
             match event {
                 Event::Resumed => {
+
                     let window = window.take().unwrap_or_else(|| {
                         let window_builder = WindowBuilder::new().with_transparent(true);
                         glutin_winit::finalize_window(window_target, window_builder, &gl_config)
@@ -138,8 +137,7 @@ impl Window {
                     };
 
                     // Make it current.
-                    let gl_context =
-                        not_current_gl_context.take().unwrap().make_current(&gl_surface).unwrap();
+                    let gl_context = not_current_gl_context.take().unwrap().make_current(&gl_surface).unwrap();
 
                     // The context needs to be current for the Renderer to set up shaders and
                     // buffers. It also performs function loading, which needs a current context on
@@ -147,9 +145,7 @@ impl Window {
                     renderer.get_or_insert_with(|| Renderer::new(&gl_display));
 
                     // Try setting vsync.
-                    if let Err(res) = gl_surface
-                        .set_swap_interval(&gl_context, SwapInterval::Wait(NonZeroU32::new(1).unwrap()))
-                    {
+                    if let Err(res) = gl_surface.set_swap_interval(&gl_context, SwapInterval::Wait(NonZeroU32::new(1).unwrap())) {
                         eprintln!("Error setting vsync: {res:?}");
                     }
 
@@ -159,9 +155,7 @@ impl Window {
                     // Destroy the GL Surface and un-current the GL Context before ndk-glue releases
                     // the window back to the system.
                     let (gl_context, ..) = state.take().unwrap();
-                    assert!(not_current_gl_context
-                        .replace(gl_context.make_not_current().unwrap())
-                        .is_none());
+                    assert!(not_current_gl_context.replace(gl_context.make_not_current().unwrap()).is_none());
                 }
                 Event::WindowEvent { event, .. } => match event {
                     WindowEvent::Resized(size) => {

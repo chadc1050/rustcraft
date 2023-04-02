@@ -1,7 +1,7 @@
 use std::ffi::{CStr, CString};
 use std::ops::Deref;
 use ::gl::types::{GLenum, GLsizei, GLuint};
-use glutin::display::GlDisplay;
+use glutin::display::{Display, GlDisplay};
 
 pub mod gl {
     #![allow(clippy::all)]
@@ -19,7 +19,8 @@ pub struct Renderer {
 }
 
 impl Renderer {
-    pub fn new<D: GlDisplay>(gl_display: &D) -> Self {
+    pub fn new(gl_display: &Display) -> Self {
+
         unsafe {
             let gl = gl::Gl::load_with(|symbol| {
                 let symbol = CString::new(symbol).unwrap();
@@ -68,6 +69,7 @@ impl Renderer {
 
             let pos_attrib = gl.GetAttribLocation(program, b"position\0".as_ptr() as *const _);
             let color_attrib = gl.GetAttribLocation(program, b"color\0".as_ptr() as *const _);
+
             gl.VertexAttribPointer(
                 pos_attrib as gl::types::GLuint,
                 2,
@@ -76,6 +78,7 @@ impl Renderer {
                 5 * std::mem::size_of::<f32>() as gl::types::GLsizei,
                 std::ptr::null(),
             );
+
             gl.VertexAttribPointer(
                 color_attrib as gl::types::GLuint,
                 3,
@@ -84,6 +87,7 @@ impl Renderer {
                 5 * std::mem::size_of::<f32>() as gl::types::GLsizei,
                 (2 * std::mem::size_of::<f32>()) as *const () as *const _,
             );
+
             gl.EnableVertexAttribArray(pos_attrib as gl::types::GLuint);
             gl.EnableVertexAttribArray(color_attrib as gl::types::GLuint);
 
@@ -129,11 +133,7 @@ impl Drop for Renderer {
     }
 }
 
-unsafe fn create_shader(
-    gl: &gl::Gl,
-    shader: gl::types::GLenum,
-    source: &[u8],
-) -> gl::types::GLuint {
+unsafe fn create_shader(gl: &gl::Gl, shader: gl::types::GLenum, source: &[u8], ) -> gl::types::GLuint {
     let shader = gl.CreateShader(shader);
     gl.ShaderSource(shader, 1, [source.as_ptr().cast()].as_ptr(), std::ptr::null());
     gl.CompileShader(shader);

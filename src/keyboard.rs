@@ -13,6 +13,7 @@ impl KeyboardEvent {
 
     pub fn handle_event(self) {
         // Prints key scan code
+        // TODO: Need to have this push notification to listening gameobjects
         println!("{}", self.input.scancode)
     }
 }

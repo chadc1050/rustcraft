@@ -30,6 +30,7 @@ glutin-winit = "0.3.0"
 raw-window-handle = "0.5.2"
 gl = "0.14.0"
 png = { version = "0.17.6", optional = true }
+cgmath = "0.18.0"
 
 [build-dependencies]
 gl_generator = "0.14"
