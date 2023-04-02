@@ -1,5 +1,3 @@
-use std::cell::RefCell;
-use std::rc::Rc;
 use cgmath::Vector3;
 use glutin::display::{Display};
 use crate::camera::Camera;
@@ -24,7 +22,7 @@ impl GameState {
     }
 
     pub fn add_game_object(mut self, game_object: Box<GameObject>) {
-        game_object.start();
+        // TODO: Start game objects before pushing to collection?
         self.game_objects.push(game_object);
     }
 

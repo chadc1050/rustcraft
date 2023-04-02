@@ -19,20 +19,20 @@ impl GameObject {
         }
     }
 
-    pub fn start(self: Box<Self>) {
-        for component in self.components.into_iter() {
+    pub fn start(self) {
+        for component in self.components {
             component.start();
         }
     }
 
-    pub fn stop(self: Box<Self>) {
-        for component in self.components.into_iter() {
+    pub fn stop(self) {
+        for component in self.components {
             component.stop();
         }
     }
 
-    pub fn update(self: Box<Self>, dt: Duration) {
-        for component in self.components.into_iter() {
+    pub fn update(self, dt: Duration) {
+        for component in self.components {
             component.update(dt);
         }
     }

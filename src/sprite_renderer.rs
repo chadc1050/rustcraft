@@ -20,15 +20,15 @@ impl<'a> SpriteRenderer<'a> {
 }
 
 impl<'a> Component for SpriteRenderer<'a> {
-    fn start(self) {
+    fn start(&self) {
         todo!()
     }
 
-    fn stop(self) {
+    fn stop(&self) {
         todo!()
     }
 
-    fn update(self, dt: Duration) {
+    fn update(&self, dt: Duration) {
         todo!()
     }
 }
