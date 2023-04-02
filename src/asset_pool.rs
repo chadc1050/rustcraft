@@ -34,7 +34,7 @@ impl AssetPool {
             let mut contents = String::new();
             file.read_to_string(&mut contents).expect("Could not read in shader contents");
 
-            let key = String::from(entry.file_name().to_str().unwrap().strip_suffix(".wgsl").unwrap());
+            let key = String::from(entry.path().file_stem().unwrap().to_str().unwrap());
             shaders.insert(String::from(key), contents);
         }
 
